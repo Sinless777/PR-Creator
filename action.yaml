@@ -1,4 +1,4 @@
-name: 'PR Creator with OpenAI'
+name: 'SinLess Games - OpenAI PR Generator'
 description: 'Automatically create a PR with OpenAI-generated content if no PR exists.'
 author: 'Sinless777'
 
