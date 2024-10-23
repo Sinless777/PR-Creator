@@ -1,0 +1,60 @@
+name: 'PR Creator with OpenAI'
+description: 'Automatically create a PR with OpenAI-generated content if no PR exists.'
+author: 'Sinless777'
+
+inputs:
+  openai_api_key:
+    description: 'OpenAI API key for generating PR information'
+    required: true
+
+  github_token:
+    description: 'GitHub token for accessing the repository and making API calls'
+    required: true
+    default: '${{ secrets.GITHUB_TOKEN }}'
+
+  repository_owner:
+    description: 'GitHub repository owner'
+    required: true
+    default: '${{ github.repository_owner }}'
+
+  repository:
+    description: 'GitHub repository name'
+    required: true
+    default: '${{ github.repository }}'
+
+  branch:
+    description: 'Branch name to create the PR for'
+    required: true
+    default: '${{ github.ref }}'
+
+  head:
+    description: 'Commit SHA for the head of the branch'
+    required: true
+    default: '${{ github.sha }}'
+
+  email:
+    description: 'Email address for the GitHub user'
+    required: true
+    default: '${{ github.actor }}@localhost'
+
+  name: 
+    description: 'Name of the GitHub user'
+    required: true
+    default: '${{ github.actor }}'
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.openai_api_key }}
+    - ${{ inputs.github_token }}
+    - ${{ inputs.repository_owner }}
+    - ${{ inputs.repository }}
+    - ${{ inputs.branch }}
+    - ${{ inputs.head }}
+    - ${{ inputs.email }}
+    - ${{ inputs.name }}
+
+branding:
+  icon: 'git-pull-request'
+  color: 'blue'
