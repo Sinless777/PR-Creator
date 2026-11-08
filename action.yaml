@@ -42,18 +42,14 @@ inputs:
     required: true
     default: '${{ github.actor }}'
 
+  openai_model:
+    description: 'Chat model used to draft the pull request title, description, and comment'
+    required: false
+    default: 'gpt-4o-mini'
+
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-    - ${{ inputs.openai_api_key }}
-    - ${{ inputs.github_token }}
-    - ${{ inputs.repository_owner }}
-    - ${{ inputs.repository }}
-    - ${{ inputs.branch }}
-    - ${{ inputs.head }}
-    - ${{ inputs.email }}
-    - ${{ inputs.name }}
 
 branding:
   icon: 'git-pull-request'
