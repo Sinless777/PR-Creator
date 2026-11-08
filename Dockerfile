@@ -1,27 +1,27 @@
-# Use Python 3.12 base image
-FROM ubuntu:24.04
+# Ubuntu 26.04 ships Python 3.14 as python3. It does not publish a python3.12 package.
+FROM ubuntu:26.04
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the requirements file if necessary
 COPY requirements.txt .
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        python3 \
+        python3-pip \
+        python3-venv \
+        git \
+        ca-certificates \
+    && python3 -m venv /opt/venv \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV PATH="/opt/venv/bin:${PATH}"
+
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+
 COPY entrypoint.sh /app/entrypoint.sh
-
-## Install Python and pip
-RUN apt-get update && apt-get install -y \
-    python3.12 \
-    python3-pip \
-    git && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install dependencies
-RUN pip install --upgrade pip && pip install -r requirements.txt
-
-# Copy the rest of the application
 COPY main.py /app/main.py
 
-# Set the entry point for the action
+RUN chmod +x /app/entrypoint.sh
+
 ENTRYPOINT ["/app/entrypoint.sh"]
